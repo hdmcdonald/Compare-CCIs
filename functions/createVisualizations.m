@@ -1,17 +1,24 @@
 function createVisualizations(opts)
 % Function to create a visual overview of all co-contraction indices for
-% manuscript...
+% manuscript. Generates Figures 1-4 (example plots illustrating each
+% co-contraction index); Figure 5, surface plots of behavior for
+% shape-based and amplitude-driven indices; Figure 6, "slice plot" which is
+% like taking a slice through the surface plots for shape-driven indices.
+% Plots the co-contraction index for increasing amplitude of EMG low if
+% holding EMG high amplitude fixed at 1. 
 % 
 % Inputs: 
-%   - opts...
-% Ouptputs: none, but generates and saves a figure called XXXX
+%   - opts - options structure containing plotting options (defined in
+%   script_MAIN_compareCCIs)
+%
+% Ouptputs: none, but generates 3 figures
 %
 % Created: Hannah D. Carey 01/09/2025
 
 lowColor = opts.colorsEMG(3,:);
 highColor = opts.colorsCCI(3,:);
 totalColor = [[127,162,81]./256 0.5];
-randInds = randsample(30,3);
+% randInds = randsample(30,3);
 x = 0:0.01:4;
 sd = 0.5; m = 2; 
 coeff = (1/(sd*sqrt(2*pi)));
@@ -34,17 +41,9 @@ opts.ylim = [0 1.1];
 % plot(x,y3,'Color',[0.4 0.4 0.4])
 
 % area overlap
-[minMus,minInds] = min([Y1;Y2]); maxMus = max(Y1,Y2);
-minInds1 = find(minInds==1);
-
-clear xMesh yMesh
-[xMesh, yMesh] = meshgrid(x,0:0.05:2);
-yMesh(yMesh> Y1+Y2) = NaN;
+[minMus,~] = min([Y1;Y2]); maxMus = max(Y1,Y2);
 
 effectiveContraction = maxMus - minMus; 
-wastedContraction = minMus;
-pkEffective = max(effectiveContraction);
-cciThSh = (wastedContraction./pkEffective);
 
 % calculate rudolph CCI
 for k = 1:length(Y1)
@@ -63,24 +62,24 @@ tiledlayout(4,6,"TileSpacing","tight")
 nexttile(1,[2,1])
 hold on
 % plot(x,max(Y1,Y2),"LineWidth",4,"Color",[opts.colorsCCI(3,:)])
-plotDemoEMG(x,Y1,Y2,opts,"Simple Ratio",1,lowColor,highColor,totalColor)
+plotDemoEMG(x,Y1,Y2,opts,"Simple Ratio",1,lowColor,highColor)
 title("Simple Ratio")
 
 nexttile(2,[2,1])
-plotDemoEMG(x,Y1,Y2,opts,"Falconer & Winter",1,lowColor,highColor,totalColor)
+plotDemoEMG(x,Y1,Y2,opts,"Falconer & Winter",1,lowColor,highColor)
 plot(x,Y1+Y2,"LineWidth",3,"Color",totalColor)
 
 nexttile(3,[2,1])
-plotDemoEMG(x,Y1,Y2,opts,"Thoroughman et al",2,lowColor,highColor,nan)
+plotDemoEMG(x,Y1,Y2,opts,"Thoroughman et al",2,lowColor,highColor)
 plot(x,effectiveContraction,"LineWidth",2,"Color",[highColor 0.5])
 
 nexttile(4,[2,1])
 hold on
-plotDemoEMG(x,Y1,Y2,opts,"Frost & Unnithan",2,lowColor,highColor,totalColor)
+plotDemoEMG(x,Y1,Y2,opts,"Frost & Unnithan",2,lowColor,highColor)
 yline(mean(minMus))
 
 nexttile(5,[2,1])
-plotDemoEMG(x,Y1,Y2,opts,"Rudolph et al",1,lowColor,highColor,totalColor)
+plotDemoEMG(x,Y1,Y2,opts,"Rudolph et al",1,lowColor,highColor)
 plot(x,Y1+Y2,"LineWidth",3,"Color",totalColor)
 
 nexttile(6,[2,1])
@@ -91,7 +90,7 @@ patch([x(CC),flip(x(CC))],[yLimits(1);yLimits';yLimits(2)],lowColor,"EdgeColor",
 
 hold on
 barh(1,x(end),0.08,"FaceColor","none")
-plotDemoEMG(x,Y1,Y2,opts,"Temporal",0,lowColor,highColor,nan)
+plotDemoEMG(x,Y1,Y2,opts,"Temporal",0,lowColor,highColor)
 x1 = x(1:128);
 xEnd = x(287:401);
 minMus1 = minMus(1:128);
@@ -101,7 +100,7 @@ plot(xEnd(minMusEnd>0.1),minMusEnd(minMusEnd>0.1),"LineWidth",2,"Color",lowColor
 plot(x(128:287),minMus(128:287),"--","LineWidth",2,"Color",lowColor)
 yline(0.1)
 
-%% Slice plot of Simple Ration, Falconer, Thoroughman
+%% Slice plot of Simple Ratio, Falconer, Thoroughman
 
 figure
 M2 = linspace(0,1,1000);
@@ -126,18 +125,19 @@ title("Shape-based CCI for fixed EMG_{high}=1")
 %% --- 3D Surface Plots --------------------
 clear t CCi
 myRange = [0 1];
-
+figure
+tiledlayout(2,3)
 colormap(flip(opts.corrColors(30:220,:)))
-nexttile(13,[2,1])
+nexttile
 fRatio = fsurf(@(m1,m2) min(m1,m2)./max(m1,m2),myRange,"EdgeColor","interp","FaceAlpha",0.6);
 title("simple ratio")
 xlabel("muscle 2")
 ylabel("muscle1")
 zlabel("CCI")
-view(-21,18)
+view(-21,18) % fixes view angle for 3D shape
 axis square
 
-nexttile(14,[2,1])
+nexttile
 fFW = fsurf(@(m1,m2) (2.*min(m1,m2))./(m1+m2),myRange,"EdgeColor","interp","FaceAlpha",0.6);
 title("Falconer & Winter")
 xlabel("muscle 2")
@@ -146,7 +146,7 @@ zlabel("CCI")
 axis square
 view(-21,18)
 
-nexttile(15,[2,1])
+nexttile
 fTh = fsurf(@(m1,m2) min(m1,m2)./(max(m1,m2) - min(m1,m2)),myRange,"EdgeColor","interp","FaceAlpha",0.6);
 zlim([0 10])
 clim([0 10])
@@ -157,7 +157,7 @@ zlabel("CCI")
 axis square
 view(-21,18)
 
-nexttile(16,[2,1])
+nexttile
 fUn = fsurf(@(m1,m2) min(m1,m2),myRange,"EdgeColor","interp","FaceAlpha",0.6);
 title("Frost")
 xlabel("muscle 2")
@@ -167,7 +167,7 @@ axis square
 view(-21,18)
 
 
-nexttile(17,[2,1])
+nexttile
 fRu = fsurf(@(m1,m2) ((min(m1,m2)./max(m1,m2)).*(m1+m2)),myRange,"EdgeColor","interp","FaceAlpha",0.6);
 title("Rudolph")
 xlabel("muscle 2")
@@ -175,35 +175,9 @@ ylabel("muscle1")
 zlabel("CCI")
 axis square
 view(-21,18)
-exportgraphics(f,'myPlot.pdf','ContentType','vector')
+% exportgraphics(f,'myPlot.pdf','ContentType','vector')
 
 
 end
 
 
-function plotDemoEMG(x,Y1,Y2,opts,myTitle,colorFlag,lowColor,highColor,totalColor)
-[minMus,minInds] = min([Y1;Y2]); maxMus = max(Y1,Y2);
-hold on
-if colorFlag == 0
-    plot(x, Y1,"-k",'LineWidth',opts.lineWidth,"Color",0.3.*ones(1,3))
-    plot(x,Y2,"--k",'LineWidth',opts.lineWidth,"Color",0.3.*ones(1,3))
-elseif colorFlag == 1
-    plot(x(1:128),minMus(1:128),"LineWidth",2,"Color",lowColor)
-    plot(x(287:401),minMus(287:401),"LineWidth",2,"Color",lowColor)
-    plot(x(128:287),minMus(128:287),"--","LineWidth",2,"Color",lowColor)
-    plot(x(1:128),maxMus(1:128),"--","LineWidth",2,"Color",highColor)
-    plot(x(128:287),maxMus(128:287),"-","LineWidth",2,"Color",highColor)
-    plot(x(287:401),maxMus(287:401),"--","LineWidth",2,"Color",highColor)
-else
-    plot(x(1:128),minMus(1:128),"LineWidth",2,"Color",lowColor)
-    plot(x(287:401),minMus(287:401),"LineWidth",2,"Color",lowColor)
-    plot(x(128:287),minMus(128:287),"--","LineWidth",2,"Color",lowColor)
-    plot(x(1:128),maxMus(1:128),"--","LineWidth",opts.lineWidth,"Color",0.3.*ones(1,3))
-    plot(x(128:287),maxMus(128:287),"-","LineWidth",opts.lineWidth,"Color",0.3.*ones(1,3))
-    plot(x(287:401),maxMus(287:401),"--","LineWidth",opts.lineWidth,"Color",0.3.*ones(1,3))
-end
-ylim(opts.ylim)
-title(myTitle)
-xticks([])
-axis square
-end

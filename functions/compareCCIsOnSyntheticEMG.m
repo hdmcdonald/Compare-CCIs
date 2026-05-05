@@ -1,4 +1,4 @@
-function [CCI,CC,maxCCI] = compareCCIsOnSyntheticEMG(t,M1,M2,opts)
+function [CCI,CC] = compareCCIsOnSyntheticEMG(t,M1,M2,opts)
 % Function to compare CCIs in different scenarios using synthetic EMG data.
 % This function generates a set of synthetic EMG signals for two muscles,
 % calculates CCIs for each scenario, and plots the EMG and their resulting
@@ -14,9 +14,9 @@ function [CCI,CC,maxCCI] = compareCCIsOnSyntheticEMG(t,M1,M2,opts)
 %               Column order: Falconer | Rudolph | ...
 %   - CC:       X x X matrix of co-contraction over time from Rudolph's CCI
 %               (rows-"trial", columns-time)
-%   - maxCCI    M x W matrix containing the theoretical maximum CCI values 
-%               for each "trial" (same structure as CCI, see paper text
-%               for details)
+%
+% Functions Called: 
+%   - generatePlotCCI
 %
 % Created: Hannah D. Carey 01/09/2025
 
@@ -26,7 +26,7 @@ tiledlayout(5,W,"TileSpacing","compact")
 
 for k = 1:size(M1,1)
     if ~isnan(M1(k,1))
-        [CCI(k,:),CC(k,:),~,maxCCI(k,:)] = generatePlotCCI(t,M1(k,:), M2(k,:), 2*k-1,opts);
+        [CCI(k,:),CC(k,:),~] = generatePlotCCI(t,M1(k,:), M2(k,:), 2*k-1,opts);
     end
 end
 clear k

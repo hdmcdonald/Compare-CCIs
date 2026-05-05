@@ -6,7 +6,7 @@ function y = calcLineFromTriangleHeight(h,t,maxAmp)
 %   - h - triangle height
 %   - t - time
 % Outputs: 
-%   - y - resulting function, triangle has area = 25
+%   - y - resulting function for triangle
 %
 % Created: Hannah D. Carey 11/2024
 
@@ -14,11 +14,7 @@ function y = calcLineFromTriangleHeight(h,t,maxAmp)
 % for triangle with set area A 
 A = 25*maxAmp;
 b = round(2*A/h);
-try
-    tb = t(end) - t(b); 
-catch me
-    keyboard
-end
+tb = t(end) - t(b); 
 
 m = (h*100)/t(b);
 c = m*tb;

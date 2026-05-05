@@ -1,11 +1,17 @@
 %% Script to Compare Co-contraction Indices Using Synthetic EMG Data
-% This script...
+% This script generates and analyzes all synthetic EMG data used in the
+% manuscript "A comparative analysis of co-contraction indices using 
+% synthetic EMG data: Implications for selection and interpretation." 
+% by Hannah D. Carey, Friedl De Groote, and Andrew Sawers (2026)
+% Preprint: doi: https://doi.org/10.64898/2026.02.03.703489 
 %
 % Required external functions: 
 %   - Chatterjee's correlation from MATLAB file exchange: 
 %     https://www.mathworks.com/matlabcentral/fileexchange/112530-chaterjee-s-xi-correlation
-%   - Scientific color maps: https://zenodo.org/records/8409685 or www.fabiocrameri.ch/colourmaps)
-%     
+%   - Scientific color maps: https://zenodo.org/records/8409685 
+%                            or www.fabiocrameri.ch/colourmaps)
+%   - hatch fill: https://www.mathworks.com/matlabcentral/fileexchange/53593-hatchfill2
+%
 % Created: 01/09/2025 HDC (from previous versions)
 
 clear
@@ -36,10 +42,10 @@ opts.plotColorLines = 0;
 createVisualizations(opts)
 
 %% (2) Check correlation between indices
-c = checkCorrelationBetweenCCIs(opts);
+c = checkCorrelationBetweenCCIs(opts,0);
 
 %% (3) Check effects of amplitude normalization 
-normResults = testEffectOfNormalization(opts,0);
+normResults = testEffectOfNormalization(opts);
 makeNormalizationFigure(normResults,opts)
 
 %% (4) Compare CCIs on synthetic data - for proposals
@@ -48,10 +54,10 @@ makeNormalizationFigure(normResults,opts)
 for k = 1:length(opts.N)
     if isscalar(opts.N)
         [M1,M2,t] = generateSyntheticEMG(opts.N(k),1,0);
-        [CCI(:,:,k),cc,maxCCI] = compareCCIsOnSyntheticEMG(t,M1,M2,opts);
+        [CCI(:,:,k),cci] = compareCCIsOnSyntheticEMG(t,M1,M2,opts);
     else
         [M1{k,1},M2{k,1},t{k,1}] = generateSyntheticEMG(opts.N(k),1,0);
-        [CCI(:,:,k),cc,maxCCI] = compareCCIsOnSyntheticEMG(t{k,1},M1{k,1},M2{k,1},opts);
+        [CCI(:,:,k),cci] = compareCCIsOnSyntheticEMG(t{k,1},M1{k,1},M2{k,1},opts);
     end
     
 end

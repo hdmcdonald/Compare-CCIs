@@ -1,6 +1,5 @@
 function [M1,M2,t] = generateSyntheticEMG(N,maxAmp,diffMax)
 % Function to generate the main set of synthetic EMG for comparing CCIs
-% This function....
 % 
 % Inputs: 
 %   - N:        number of timepoints in synthetic EMG signals
@@ -12,6 +11,10 @@ function [M1,M2,t] = generateSyntheticEMG(N,maxAmp,diffMax)
 %   - M1 & M2:  M x N matrix containing synthetic EMG for muscle 1 and 
 %               muscle 2 respectively (rows-"trial", columns-time)
 % 
+% Functions Called: 
+%   - createLineWithBendPoint
+%   - calcLineFromTriangleHeight
+%
 % Created: Hannah D. Carey 01/09/2025
 
 % t = linspace(0,100,N);
@@ -29,7 +32,6 @@ if diffMax==1
     maxAmp = 1;
 end
 
-% keyboard
 % muscle 2
 m2A = createLineWithBendPoint(t,N2,maxAmp*100,0,0);
 m2B = 100*maxAmp-maxAmp.*t;
@@ -50,11 +52,6 @@ switchX = 56;
 m2Low2 = createLineWithBendPoint(t,switchX,0.08*100,0.08*100,maxAmp*100);
 m2Low1 = m2Low2;
 m2Low1(1:switchX) = 0.02*100;
-
-% mus2Orig = 1.5.*maxAmp.*t - 100*0.75*maxAmp;%mus2Orig(mus2Orig<0) = 0;
-% mn2 = mus2Orig(switchX);
-% m2Low1 = mus2Orig; m2Low1(1:switchX) = mn2/4;
-% m2Low2 = mus2Orig; m2Low2(1:switchX) = mn2;
     
 % concatinate signals for muscle 1 and 2
 M1 = [m1A; m1B; m1Max; m1C; m1B; m1Flat1;...

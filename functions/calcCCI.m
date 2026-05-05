@@ -16,7 +16,7 @@ function [CCI,cci] = calcCCI(mus1, mus2, method)
 %   - CCI - co-contraction index 
 %   - cci - time series of Rudolph co-contraction
 
-% check for any muscles that are all nan
+% check for any muscles that are all nan, set CCI to NaN
 if all(isnan(mus1),"all") ||all(isnan(mus2),"all")
     CCI = NaN;
     cci = NaN(size(mus1));
@@ -24,45 +24,52 @@ else
     lowMus = min(mus1, mus2);    % needed for more than one method
     hiMus = max(mus1,mus2);
     totalEMG = mus1 + mus2;
-    intregralSmallerValue = trapz(lowMus);
-    if method==1
-        integralTotal = trapz(totalEMG);
-        CCI=2*intregralSmallerValue / integralTotal;
-    elseif method==2
-        try
-            for n = 1:size(mus1,1)
+    % define a time vector for integration
+    tVec = linspace(0,1,size(mus1,2));
 
+    intregralSmallerValue = trapz(tVec,lowMus);
+    
+    if method==1   % Falconer & Winter CCI
+        integralTotal = trapz(tVec,totalEMG);
+        CCI=2*intregralSmallerValue / integralTotal;
+    elseif method==2  % Rudolph's CCI (amplitude-driven)
+        try
+            for n = 1:size(mus1,1)  
+
+                % calculate Rudolph CCI at each time point
                 for t = 1:size(mus1,2)
-                    cci(n,t) = (lowMus(n,t)./hiMus(n,t)) .* (lowMus(n,t) + hiMus(n,t));
+                    if hiMus(n,t) == 0 % if both muscles are 0 
+                        cci(n,t) = 0;  % define CCI = 0 at that timepoint 
+                    else
+                        cci(n,t) = (lowMus(n,t)./hiMus(n,t)) .* (lowMus(n,t) + hiMus(n,t));
+                    end
                 end
                 clear t
-                % CCI = sum(cci,"omitmissing");
-                % cci(isnan(cci)) = 0;
-
-                t = linspace(0,1,size(mus1,2));
-                CCI(n,1) = trapz(t,cci(n,:));
+                
+                CCI(n,1) = trapz(tVec,cci(n,:));
             end
             clear n
         catch me
             keyboard
         end
-    elseif method == 3
+    elseif method == 3  % Frost & Unnithan
 
-        CCI = mean(lowMus);
-        % intregralSmallerValue = trapz(lowMus);
-        % CCI = intregralSmallerValue/length(mus1);
+        CCI = mean(lowMus);     
 
-    elseif method == 4
-        % Thoroughman & Shadmere
+    elseif method == 4  % Thoroughman & Shadmere
         effectiveContraction = hiMus - lowMus;
         wastedContraction = lowMus;
         pkEffective = max(effectiveContraction);
-        CCI = mean(wastedContraction./pkEffective);
-    elseif method == 5
-        % Simple Ratio (cite Seyedali et al?)
-        intregralLargerValue = trapz(hiMus);
+        if pkEffective == 0
+            CCI = 0;
+        else
+            CCI = mean(wastedContraction./pkEffective);
+        end
+    elseif method == 5  % Simple Ratio 
+        intregralLargerValue = trapz(tVec,hiMus);
         CCI = intregralSmallerValue/intregralLargerValue;
 
     end
 end
+
 end
