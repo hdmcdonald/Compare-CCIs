@@ -18,13 +18,12 @@ This study evaluated the behavior and interrelationships of six commonly used co
 Correlation analyses showed stronger associations within-category than between-category, supporting the proposed classification scheme. CCI behavior yielded three principal findings, each paired with a practical recommendation (see proposals below). These results provide initial guidance for selecting, calculating, and interpretating CCIs, and they establish a framework for testing the robustness of these theoretical findings using experimental EMG from diverse tasks, muscle pairs, and populations.
 
 ## Classification of Co-contraction Indices: 
-
-<img width="322" alt="surfPlots" src="https://github.com/user-attachments/files/27417004/Figure_5_surfacePlots.tif">
+<img width="700" alt="Figure 5. 3D surface plots depicting all possible values of each co-contraction index (CCI) for any combination of EMG1 and EMG2" src="figures/Figure_5_surfacePlots.png">
 
 **Figure 5.** 3D surface plots depicting all possible values of each co-contraction index (CCI) for any combination of EMG1 and EMG2. Note the differences in shape, and thus behavior, of the CCIs. Panels A-C exhibit a dark blue “ridge” of high co-contraction whereas panels D and E possess a “sharp point” or peak of high co-contraction. The Simple Ratio (A), Falconer-Winter (B), and Thoroughman-Shadmehr (C) CCIs all return high co-contraction values when the two EMG signals have a similar value or shape, even when their amplitude is low (hence the “ridge”). These three indices are therefore termed shape-based CCIs. In contrast, the Unnithan-Frost and Rudolph CCIs both require high amplitude to produce high levels of co-contraction (hence the distinct peak-like feature in their surface plots). Because these two CCIs are primarily influenced by signal amplitude and require high activation in both muscles to produce large co-contraction values, they are termed amplitude-based CCIs. The temporal CCI is not included in the 3D surface plots because it does not vary with EMG amplitude. As CCI formulas do not all have the same maximum, y-axis limits in the surface plots vary.
 
 ## Generation of Synthetic EMG data:
-<img width="322" alt="randomSyntheticEMG" src="https://github.com/user-attachments/assets/a55a6f9b-869b-45ea-971a-06cbdfe65da5">
+<img width="500" alt="randomSyntheticEMG" src="https://github.com/user-attachments/assets/a55a6f9b-869b-45ea-971a-06cbdfe65da5">
 
 **Figure 7. Samples of randomly generated synthetic EMG signals used to quantify correlations between co-contraction indices.**
 
@@ -37,22 +36,27 @@ All synthetic EMG signals were rectified to remove negative values; signals with
 
 ## Proposal 1: Different amplitude normalization techniques alter the magnitude and interpretation of co-contraction indices: 
 
-<img width="322" alt="ampNorm" src="https://github.com/user-attachments/assets/d12aa69b-757b-4196-a838-64afe6d092e2">
+### Recommendation: Because the effect of amplitude normalization on co-contraction varies by index, studies should assess the sensitivity of their results to different normalization techniques when possible.
+
+<img width="500" alt="ampNorm" src="https://github.com/user-attachments/assets/d12aa69b-757b-4196-a838-64afe6d092e2">
 
 **Figure 9. Amplitude normalization influences each CCI in distinct ways.** In panels A and B, the amplitude of EMG1 (solid black lines) is fixed, while that of EMG2 varies to represent three amplitude normalization conditions: non-normalized (dotted line, maximum amplitude 1.4), within-task normalization (dash-dotted line, maximum amplitude 1), and MVC normalization (dashed line, maximum amplitude 0.6). Panels C and D show bar plots of co-contraction values for all six CCIs, calculated from the three EMG1 and EMG2 combinations in panels A and B. Amplitude-driven CCIs (i.e., Rudolph and Unnithan-Frost) are most affected when amplitude normalization reduces both EMGlow and total EMG (panel C). In contrast, shaped-based CCIs, like Falconer-Winter, are most sensitive when normalization alters only one of EMGlow and total EMG (panel D). Abbreviations: CCISR: simple ratio; CCIFW: Falconer-Winter; CCITS: Thoroughman-Shadmehr; CCIR: Rudolph; CCIUF: Unnithan-Frost; CCIT: temporal.
-
-### Recommendation: Because the effect of amplitude normalization on co-contraction varies by index, studies should assess the sensitivity of their results to different normalization techniques when possible.
 
 
 ## Proposal 2: Co-contraction estimates calculated from different indices are not directly comparable.
 
+### Recommendation: Avoid direct comparisons of co-contraction values derived from different indices. Instead, evaluate relative trends with respect to each index’s theoretical maximum to ensure fair, meaningful comparisons across CCIs.
+
+<img width="500" alt="Figure 5. 3D surface plots depicting all possible values of each co-contraction index (CCI) for any combination of EMG1 and EMG2" src="figures/Figure_10_Proposal2.png">
 
 **Figure 10. Under identical conditions, different indices yield different co-contraction values.** Panels A-C illustrate three levels of overlap between two synthetic EMG signals plotted as a solid grey line and a dashed black line (A: none, B: complete, C: partial). Overlap is shown by the shaded blue regions, with corresponding bar graphs presenting the co-contraction values derived from each index for the three conditions. Light gray shading indicates periods of co-contraction identified by the temporal CCI. (A): In the absence of overlap, all CCI correctly return a value of zero. (B): Under complete overlap, all CCIs indicate “maximum” co-contraction, but the Thoroughman-Shadmehr (CCITS) and Rudolph (CCIR) indices return higher numerical values. Because indices have different theoretical maximums, these higher values should not be misinterpreted as “more” co-contraction than the other indices, but rather as “full” co-contraction. (C): Under partial overlap co-contraction values differ across indices. Subsequently, direct comparisons of indices’ absolute values should be avoided. Abbreviations: CCISR: Simple Ratio; CCIFW: Falconer-Winter; CCITS: Thoroughman-Shadmehr; CCIR: Rudolph; CCIUF: Unnithan-Frost; CCIT: Temporal.
 
-### Recommendation: Avoid direct comparisons of co-contraction values derived from different indices. Instead, evaluate relative trends with respect to each index’s theoretical maximum to ensure fair, meaningful comparisons across CCIs.
 
 ## Proposal 3: The choice of co-contraction index should be aligned with hypothesized change (or difference) in EMG signals.
 
+### Recommendation: Match the co-contraction index to the co-contraction concept and thus EMG feature of interest – use a shape-based index (e.g., Falconer-Winter) when signal similarity is prioritized, and an amplitude-driven index (e.g., Rudolph) when differences in signal magnitude and duration are expected.
+
+<img width="500" alt="Figure 5. 3D surface plots depicting all possible values of each co-contraction index (CCI) for any combination of EMG1 and EMG2" src="figures/Figure_11_Proposal3.png">
+
 **Figure 11. Align the choice of CCI with the EMG feature expected to change or differ.** Synthetic EMG signals are plotted as solid gray and dashed black lines, with overlapping regions shaded blue. Light gray shading indicates periods of co-contraction identified by the temporal CCI. Corresponding bar graphs display the co-contraction values calculated from each index under each condition. Because of their sensitivity to signal similarity, shape-based CCIs (i.e., CCISR, CCIFW, CCITS) – but not amplitude-driven (e.g., CCIR, CCIUF) or temporal CCIs – return identical values in panels A and B, indicating “complete” co-contraction despite differences in signal amplitude. In contrast, amplitude-driven, but not shape-based CCIs reveal their sensitivity to signal amplitude by producing smaller co-contraction values in panel A than in B. Variations in co-contraction due to signal similarity are best detected with shape-based CCIs, whereas differences in co-contraction arising from changes in signal amplitude are better captured with amplitude-based CCIs. Abbreviations: CCISR: simple ratio; CCIFW: Falconer-Winter; CCITS: Thoroughman-Shadmehr; CCIR: Rudolph; CCIUF: Unnithan-Frost; CCIT: temporal.
 
-### Recommendation: Match the co-contraction index to the co-contraction concept and thus EMG feature of interest – use a shape-based index (e.g., Falconer-Winter) when signal similarity is prioritized, and an amplitude-driven index (e.g., Rudolph) when differences in signal magnitude and duration are expected.
